@@ -1,0 +1,71 @@
+
+<html><head> <title>SuperSmartFrog - Maze+ </title>
+
+<script type="text/javascript">
+<!--    f3.14<at>chello.at     -->
+<!--
+ var grid = 	[[ 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 ],
+		 [ 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 ],
+		 [ 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0 ],
+		 [ 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0 ],
+		 [ 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0 ],
+		 [ 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0 ],
+		 [ 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0 ],
+		 [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 ] ]  ; 
+
+ var   fx=100, fy=450 ,   dirx =  1 ,  diry = 0  ;
+ var anz=99 , lin, nex=1, elmx, elmy, ndx, ndy, eid, x, y,  z = 0  ;   
+ var  gridx = grid[0].length ;  var  gridy = grid.length ; 
+var path  = new Array( 2*anz) ; var dnr  = new Array( 2*anz) ; 
+var bnr  = new Array( anz ) ;  dnr[z]=dirx; dnr[z+1]=diry ; 
+path[z]=fx; path[z+1]=fy; bnr[0]="frog" ;
+
+function back(){ 
+if(z > 0){ fx=path[2*z - 2];  fy = path[2*z - 1] ;
+document.getElementById("frog").style.left = fx ;
+document.getElementById("frog").style.top = fy ;
+document.getElementById(bnr[z]).style.left =  path[2*z] ;
+document.getElementById(bnr[z]).style.top =  path[2*z+1] ;
+dirx = dnr[2*z - 2];  diry = dnr[2*z - 1] ;  z--;  }}
+
+function KeyCheck(e){  var KeyID = (window.event) ? 
+	event.keyCode : e.keyCode;  if(KeyID == 66 )   back() ;   }
+
+function check_nex(){ nex=1;   for(var i=1; i<=anz; i++){
+  elmx = document.getElementById("blatt"+i).style.left.slice(0,3)  ; 
+  elmy = document.getElementById("blatt"+i).style.top.slice(0,3)  ;
+  if(ndx==0) { if(elmx==fx && (fy-elmy)*(y-elmy)< 0 ) nex=0; 
+            } else { if(elmy==fy && (fx-elmx)*(x-elmx)< 0 ) nex=0;  }  } }
+
+function clic( el ) { eid =  el.id ; x =  el.offsetLeft ; 
+   y =  el.offsetTop ; lin=0; if (x==fx || y==fy) lin=1 ;   
+   ndx = Math.sign(x-fx); ndy = Math.sign(y-fy) ;  
+   if(eid != "frog" && lin==1 && (dirx*ndx+diry*ndy) != -1){
+       check_nex();  if( nex==1) { 
+       document.getElementById(eid).style.left = -77; 
+       document.getElementById(eid).style.top = -77 ;    
+       document.getElementById("frog").style.left = x;  fx = x ; 
+       document.getElementById("frog").style.top = y;  fy = y ;  z++;
+       path[2*z] = x; path[2*z+1] = y; dnr[2*z] = ndx; dnr[2*z+1] = ndy; 
+       bnr[z]=eid ;  dirx = ndx; diry = ndy;   
+       if(z== anz ) alert(" Bravo ! You win ; -) ") ; } }}
+
+function addLeafs() { var iz= 0;
+  for(  var i=0; i < gridy  ;i++ ) for(  var j=0 ; j < gridx ;j++ ) {  
+  if(grid[i][j]==1){  iz++; var istr = 'blatt'+iz ;  
+        var postr = 'position:absolute; left:'+(200+ 50*j)+';top:'+(150+ 50*i) ;
+        var div = document.createElement('div') ; 
+        document.body.appendChild(div);              div.id = istr ;
+        div.innerHTML = '<img src="blatt.jpg">';  div.style= postr ; 
+        div.setAttribute("onclick", "clic(this)"); } }  anz  =  iz ;  }
+
+document.onkeydown = KeyCheck;
+//-->
+</script>  </head>  <body bgcolor="ccddff" onload = "addLeafs ()">
+<div id="frog" onClick="clic(this)"  style="position:absolute;left:100;top:450">
+	<img src="frog.jpg" ></div>
+
+ 44 Blätter  
+ <br> ( + <b>'B'</b>ack-function..)   
+
+</body> </html>
