@@ -1,24 +1,22 @@
-
 <html><head> <title>SuperSmartFrog - Maze+ </title>
-
 <script type="text/javascript">
 <!--    f3.14<at>chello.at     -->
 <!--
- var grid = 	[[ 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 ],
-		 [ 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 ],
-		 [ 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0 ],
-		 [ 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0 ],
-		 [ 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0 ],
-		 [ 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0 ],
-		 [ 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0 ],
-		 [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 ] ]  ; 
+ var grid = 	[[ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 ],
+		 [ 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 ],
+		 [ 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0 ],
+		 [ 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0 ],
+		 [ 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0 ],
+		 [ 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0 ],
+		 [ x, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0 ],
+		 [ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 ] ]  ; 
 
- var   fx=100, fy=450 ,   dirx =  1 ,  diry = 0  ;
+ var    dirx =  1 ,  diry = 0  ; // set initial frog direction 
  var anz=99 , lin, nex=1, elmx, elmy, ndx, ndy, eid, x, y,  z = 0  ;   
  var  gridx = grid[0].length ;  var  gridy = grid.length ; 
 var path  = new Array( 2*anz) ; var dnr  = new Array( 2*anz) ; 
 var bnr  = new Array( anz ) ;  dnr[z]=dirx; dnr[z+1]=diry ; 
-path[z]=fx; path[z+1]=fy; bnr[0]="frog" ;
+var fx=0, fy=0; bnr[0]="frog" ; 
 
 function back(){ 
 if(z > 0){ fx=path[2*z - 2];  fy = path[2*z - 1] ;
@@ -50,22 +48,27 @@ function clic( el ) { eid =  el.id ; x =  el.offsetLeft ;
        bnr[z]=eid ;  dirx = ndx; diry = ndy;   
        if(z== anz ) alert(" Bravo ! You win ; -) ") ; } }}
 
-function addLeafs() { var iz= 0;
+function addFrog() { var fset=1;
+  for(  var i=0; i < gridy  ;i++ ) for(  var j=0 ; j < gridx ;j++ ) {  
+  if(grid[i][j]==x && fset==1){  var istr = 'frog' ;  fset=0; 
+        var postr = 'position:absolute; left:'+(100+ 50*j)+';top:'+(100+ 50*i) ;
+        fx = (100+ 50*j), fy = (100+ 50*i) ; path[0]=fx; path[1]=fy ; 
+        var div = document.createElement('div') ; 
+        document.body.appendChild(div);              div.id = istr ;
+        div.innerHTML = '<img src="frog.jpg">';  div.style= postr ; 
+        div.setAttribute("onclick", "clic(this)"); } } }
+
+function addLeafs() {     var iz= 0;
   for(  var i=0; i < gridy  ;i++ ) for(  var j=0 ; j < gridx ;j++ ) {  
   if(grid[i][j]==1){  iz++; var istr = 'blatt'+iz ;  
-        var postr = 'position:absolute; left:'+(200+ 50*j)+';top:'+(150+ 50*i) ;
+        var postr = 'position:absolute; left:'+(100+ 50*j)+';top:'+(100+ 50*i) ;
         var div = document.createElement('div') ; 
         document.body.appendChild(div);              div.id = istr ;
         div.innerHTML = '<img src="blatt.jpg">';  div.style= postr ; 
-        div.setAttribute("onclick", "clic(this)"); } }  anz  =  iz ;  }
+        div.setAttribute("onclick", "clic(this)"); } }  anz  =  iz ;  
+var txt=" "+anz+" Leafs  ( + <b>'B'</b>ack-function..)  "
+document.getElementById("p1").innerHTML = txt ; addFrog()  }
 
-document.onkeydown = KeyCheck;
-//-->
+document.onkeydown = KeyCheck;   //-->
 </script>  </head>  <body bgcolor="ccddff" onload = "addLeafs ()">
-<div id="frog" onClick="clic(this)"  style="position:absolute;left:100;top:450">
-	<img src="frog.jpg" ></div>
-
- 44 Leafs  
- <br> ( + <b>'B'</b>ack-function..)   
-
-</body> </html>
+ <p id="p1"> </p>   <br>  </body> </html>
